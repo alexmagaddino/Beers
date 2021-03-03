@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/navigation_main"
+    app:startDestination="@id/beersListFragment">
+
+    <fragment
+        android:id="@+id/beersListFragment"
+        android:name="it.alexm.beers.ui.beers.BeersListFragment"
+        android:label="Beer List">
+        <action
+            android:id="@+id/to_detailFragment"
+            app:destination="@id/detail"
+            app:popUpTo="@id/beersListFragment"
+            app:popUpToInclusive="false" />
+    </fragment>
+    <fragment
+        android:id="@+id/detail"
+        android:name="it.alexm.beers.ui.detail.DetailFragment"
+        android:label="{title}">
+
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true" />
+
+        <argument
+            android:name="beer"
+            app:argType="it.alexm.beers.data.vo.Beer" />
+
+    </fragment>
+
+</navigation>

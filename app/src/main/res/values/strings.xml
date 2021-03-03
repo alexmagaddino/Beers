@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Beers</string>
+    <string name="choose_range">Choose a brewed range date</string>
+    <string name="between">Selected from %1$s to %2$s</string>
+    <string name="not_found">I have not found anything</string>
+    <string name="first_brewed">First brewed: %1$s</string>
+    <string name="abv">ABV: %1$s\%%</string>
+</resources>

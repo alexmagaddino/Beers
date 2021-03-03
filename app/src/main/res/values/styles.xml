@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="elevation">40dp</dimen>
+    <dimen name="corner_radius">10dp</dimen>
+    <dimen name="default_margin">16dp</dimen>
+    <dimen name="half_margin">8dp</dimen>
+
+    <dimen name="title_text_size">18sp</dimen>
+    <dimen name="body_text_size">16sp</dimen>
+
+    <style name="title">
+        <item name="android:textSize">@dimen/title_text_size</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="body">
+        <item name="android:textSize">@dimen/body_text_size</item>
+    </style>
+
+</resources>
