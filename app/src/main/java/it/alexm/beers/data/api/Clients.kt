@@ -1,6 +1,7 @@
 package it.alexm.beers.data.api
 
 import android.util.Log
+import it.alexm.beers.BuildConfig
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -23,7 +24,7 @@ private fun getOkHttpClient() = OkHttpClient.Builder()
 
 private fun getRetrofitClient() = Retrofit.Builder()
     .client(getOkHttpClient())
-    .baseUrl("https://api.punkapi.com/v2/")
+    .baseUrl(BuildConfig.BASE_URL)
     .addConverterFactory(GsonConverterFactory.create())
     .build()
 

@@ -1,6 +1,7 @@
 package it.alexm.beers.data.api
 
 import it.alexm.beers.data.vo.Beer
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query
 
@@ -11,5 +12,5 @@ interface BeersService {
         @Query("page") page: Int,
         @Query("brewed_after") start: String?,
         @Query("brewed_before") end: String?
-    ): List<Beer>
+    ): Response<List<Beer>>
 }

@@ -13,11 +13,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.airbnb.epoxy.EpoxyRecyclerView
+        <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/half_margin" />
+            android:orientation="vertical"
+            android:padding="@dimen/half_margin"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:spanCount="2" />
 
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 

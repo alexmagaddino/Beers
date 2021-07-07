@@ -4,21 +4,19 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.GridLayoutManager.VERTICAL
-import androidx.recyclerview.widget.RecyclerView
 import it.alexm.beers.R
 import it.alexm.beers.databinding.FragmentBeersListBinding
 import it.alexm.beers.showDatePicker
 import it.alexm.beers.showToast
 import it.alexm.beers.ui.beers.DateSession.endDate
 import it.alexm.beers.ui.beers.DateSession.startDate
+import it.alexm.beers.ui.beers.controller.BeersController
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 
 class BeersListFragment : Fragment() {
-
-    private var currentPage: Int = 1
-    private var previousTotal: Int = 0
 
     private var binding: FragmentBeersListBinding? = null
     private val viewModel: BeersListViewModel by viewModels()
@@ -47,16 +45,17 @@ class BeersListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setRecycler()
+        binding?.recyclerView?.adapter = controller
 
-        viewModel.getBeers(currentPage)
-
-        observe()
+        lifecycleScope.launch {
+            viewModel.getBeers().collectLatest { beers ->
+                binding?.swipeRefreshLayout?.isRefreshing = false
+                controller.submitData(beers)
+            }
+        }
 
         binding?.swipeRefreshLayout?.setOnRefreshListener {
-            currentPage = 1
-            previousTotal = 0
-            viewModel.getBeers(currentPage, true)
+            viewModel.getBeers(true)
         }
 
         setHasOptionsMenu(true)
@@ -76,42 +75,5 @@ class BeersListFragment : Fragment() {
                 viewModel.getBeersInRange(start, end)
             }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun observe() {
-        viewModel.liveError.observe(viewLifecycleOwner) {
-            showToast { "Errore" }
-        }
-
-        viewModel.liveBeers.observe(viewLifecycleOwner) { (beers, refresh) ->
-            binding?.swipeRefreshLayout?.isRefreshing = false
-
-            if (refresh)
-                controller.refreshBeers(beers)
-            else
-                controller.addBeers(beers)
-        }
-    }
-
-    private fun setRecycler() = binding?.recyclerView?.apply {
-
-        layoutManager = GridLayoutManager(context, 2, VERTICAL, false)
-        setController(controller)
-        addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
-                super.onScrollStateChanged(recyclerView, newState)
-                val totalItemCount = controller.adapter.itemCount
-                val visibleItemCount = recyclerView.childCount
-                val firstVisibleItem =
-                    (recyclerView.layoutManager as GridLayoutManager).findFirstVisibleItemPosition()
-
-                previousTotal = totalItemCount
-
-                if ((totalItemCount - visibleItemCount) <= (firstVisibleItem + 20)) {
-                    currentPage += 1
-                    viewModel.getBeers(currentPage)
-                }
-            }
-        })
     }
 }
