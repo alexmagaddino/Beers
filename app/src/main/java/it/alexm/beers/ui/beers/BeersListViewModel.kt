@@ -12,11 +12,24 @@ import it.alexm.beers.data.vo.BrewDate
 import it.alexm.beers.ui.beers.DateSession.cleanDate
 import it.alexm.beers.ui.beers.DateSession.endDate
 import it.alexm.beers.ui.beers.DateSession.startDate
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class BeersListViewModel : ViewModel() {
+
+    private val searchFlow = MutableStateFlow("")
+
+    fun addSearchQuery(query: String?) {
+        searchFlow.value = query ?: ""
+    }
+
+    fun searchCollect(action: (String) -> Unit) {
+        viewModelScope.launch {
+            searchFlow.debounce(400).filter(String::isNotEmpty).collect {
+                action(it)
+            }
+        }
+    }
 
     private fun pager(start: String? = null, end: String? = null) = Pager(
         config = PagingConfig(pageSize = 25, enablePlaceholders = false),

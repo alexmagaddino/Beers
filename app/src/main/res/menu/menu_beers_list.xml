@@ -2,8 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/search"
+        android:icon="@drawable/ic_search"
+        android:title=""
+        app:actionViewClass="androidx.appcompat.widget.SearchView"
+        app:showAsAction="ifRoom" />
+    <item
         android:id="@+id/range_date"
         android:icon="@drawable/ic_date_range"
         android:title=""
-        app:showAsAction="always" />
+        app:showAsAction="ifRoom|collapseActionView" />
 </menu>

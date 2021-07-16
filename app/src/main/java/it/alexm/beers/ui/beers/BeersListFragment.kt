@@ -2,6 +2,7 @@ package it.alexm.beers.ui.beers
 
 import android.os.Bundle
 import android.view.*
+import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -47,33 +48,57 @@ class BeersListFragment : Fragment() {
 
         binding?.recyclerView?.adapter = controller
 
+        binding?.swipeRefreshLayout?.setOnRefreshListener {
+            viewModel.getBeers(true)
+        }
+
+        observe()
+
+        setHasOptionsMenu(true)
+    }
+
+    private fun observe() {
         lifecycleScope.launch {
+
             viewModel.getBeers().collectLatest { beers ->
                 binding?.swipeRefreshLayout?.isRefreshing = false
                 controller.submitData(beers)
             }
         }
 
-        binding?.swipeRefreshLayout?.setOnRefreshListener {
-            viewModel.getBeers(true)
+        viewModel.searchCollect {
+            showToast { it }
         }
-
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.menu_beers_list, menu)
+        val search = menu.findItem(R.id.search).actionView as SearchView
+        search.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean {
+                viewModel.addSearchQuery(newText)
+                return false
+            }
+
+        })
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.range_date)
-            showDatePicker(startDate?.inMillis(), endDate?.inMillis()) { start, end ->
-                showToast {
-                    getString(R.string.between, start.toString(), end.toString())
-                }
-                viewModel.getBeersInRange(start, end)
+        if (item.itemId == R.id.range_date) showDatePicker(
+            startDate?.inMillis(),
+            endDate?.inMillis()
+        ) { start, end ->
+            showToast {
+                getString(R.string.between, start.toString(), end.toString())
             }
+            viewModel.getBeersInRange(start, end)
+        }
+
         return super.onOptionsItemSelected(item)
     }
 }
