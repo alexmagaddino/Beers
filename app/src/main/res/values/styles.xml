@@ -3,6 +3,7 @@
 
     <dimen name="elevation">40dp</dimen>
     <dimen name="corner_radius">10dp</dimen>
+    <dimen name="bottomsheet_corner_radius">20dp</dimen>
     <dimen name="default_margin">16dp</dimen>
     <dimen name="half_margin">8dp</dimen>
 
@@ -23,6 +24,13 @@
         <item name="android:textSize">@dimen/body_text_size</item>
         <item name="textAllCaps">true</item>
         <item name="android:textColor">@color/yellow</item>
+    </style>
+
+    <style name="MyBottomSheet" parent="Theme.MaterialComponents.BottomSheetDialog">
+        <item name="cornerSize">0dp</item>
+        <item name="cornerFamilyTopLeft">rounded</item>
+        <item name="cornerSizeTopLeft">@dimen/bottomsheet_corner_radius</item>
+        <item name="cornerSizeTopRight">@dimen/bottomsheet_corner_radius</item>
     </style>
 
 </resources>

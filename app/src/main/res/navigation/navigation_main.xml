@@ -17,7 +17,7 @@
             android:id="@+id/to_offersFragment"
             app:destination="@id/offersFragment" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/detail"
         android:name="it.alexm.beers.ui.detail.DetailFragment"
         android:label="{title}">
@@ -28,7 +28,7 @@
         <argument
             android:name="beer"
             app:argType="it.alexm.beers.data.vo.Beer" />
-    </fragment>
+    </dialog>
     <fragment
         android:id="@+id/offersFragment"
         android:name="it.alexm.beers.ui.offer.OffersFragment"
