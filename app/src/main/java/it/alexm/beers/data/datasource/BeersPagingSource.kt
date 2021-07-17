@@ -1,4 +1,4 @@
-package it.alexm.beers.data.repository
+package it.alexm.beers.data.datasource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -9,9 +9,14 @@ import it.alexm.beers.data.vo.Beer
  * created by alexm on 07/07/21
  */
 class BeersPagingSource(
-    private val start: String? = null,
-    private val end: String? = null
+    beerName: String?,
+    start: String?,
+    end: String?
 ) : PagingSource<Int, Beer>() {
+
+    private var mBeerName: String? = beerName?.replace(" ", "_")
+    private var mStart: String? = start
+    private var mEnd: String? = end
 
     private val service by lazyBeerService()
 
@@ -19,15 +24,19 @@ class BeersPagingSource(
         private const val STARTING_PAGE = 1
     }
 
-    override fun getRefreshKey(state: PagingState<Int, Beer>) =
-        state.anchorPosition?.let { anchorPosition ->
+    override fun getRefreshKey(state: PagingState<Int, Beer>): Int? {
+        mBeerName = null
+        mStart = null
+        mEnd = null
+        return state.anchorPosition?.let { anchorPosition ->
             state.closestPageToPosition(anchorPosition)?.prevKey?.plus(1)
                 ?: state.closestPageToPosition(anchorPosition)?.nextKey?.minus(1)
         }
+    }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Beer> {
         val pageIndex = params.key ?: STARTING_PAGE
-        val r = service.getPagedBeers(pageIndex, start, end)
+        val r = service.getPagedBeers(pageIndex, mBeerName, mStart, mEnd)
         return if (r.isSuccessful) {
             val nextPage = r.body()?.isNotEmpty()?.let { pageIndex + 1 }
             LoadResult.Page(

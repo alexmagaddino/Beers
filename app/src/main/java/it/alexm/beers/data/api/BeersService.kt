@@ -10,6 +10,7 @@ interface BeersService {
     @GET("beers")
     suspend fun getPagedBeers(
         @Query("page") page: Int,
+        @Query("beer_name") beerName: String?,
         @Query("brewed_after") start: String?,
         @Query("brewed_before") end: String?
     ): Response<List<Beer>>

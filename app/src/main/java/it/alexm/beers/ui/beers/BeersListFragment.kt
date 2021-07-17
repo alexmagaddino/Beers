@@ -49,7 +49,7 @@ class BeersListFragment : Fragment() {
         binding?.recyclerView?.adapter = controller
 
         binding?.swipeRefreshLayout?.setOnRefreshListener {
-            viewModel.getBeers(true)
+            controller.refresh()
         }
 
         observe()
@@ -68,6 +68,12 @@ class BeersListFragment : Fragment() {
 
         viewModel.searchCollect {
             showToast { it }
+            lifecycleScope.launch {
+                viewModel.getBeers(it).collectLatest { beers ->
+                    binding?.swipeRefreshLayout?.isRefreshing = false
+                    controller.submitData(beers)
+                }
+            }
         }
     }
 
@@ -84,7 +90,6 @@ class BeersListFragment : Fragment() {
                 viewModel.addSearchQuery(newText)
                 return false
             }
-
         })
     }
 
@@ -96,7 +101,12 @@ class BeersListFragment : Fragment() {
             showToast {
                 getString(R.string.between, start.toString(), end.toString())
             }
-            viewModel.getBeersInRange(start, end)
+            lifecycleScope.launch {
+                viewModel.getBeers(start = start.toString(), end = end.toString()).collectLatest {
+                    binding?.swipeRefreshLayout?.isRefreshing = false
+                    controller.submitData(it)
+                }
+            }
         }
 
         return super.onOptionsItemSelected(item)
