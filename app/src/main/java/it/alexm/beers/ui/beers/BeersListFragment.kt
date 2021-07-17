@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import it.alexm.beers.R
 import it.alexm.beers.databinding.FragmentBeersListBinding
 import it.alexm.beers.showDatePicker
@@ -17,6 +18,7 @@ import it.alexm.beers.ui.beers.controller.BeersController
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class BeersListFragment : Fragment() {
 
     private var binding: FragmentBeersListBinding? = null
@@ -101,6 +103,8 @@ class BeersListFragment : Fragment() {
             showToast {
                 getString(R.string.between, start.toString(), end.toString())
             }
+            startDate = start
+            endDate = end
             lifecycleScope.launch {
                 viewModel.getBeers(start = start.toString(), end = end.toString()).collectLatest {
                     binding?.swipeRefreshLayout?.isRefreshing = false

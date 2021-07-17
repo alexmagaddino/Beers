@@ -12,7 +12,7 @@ data class BrewDate(
     override fun toString() = "${month + 1}-$year"
 
     fun inMillis() = c.run {
-        set(year, month + 1, 1)
+        set(year, month, 1)
         timeInMillis
     }
 

@@ -5,14 +5,18 @@ import androidx.lifecycle.viewModelScope
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.cachedIn
+import dagger.hilt.android.lifecycle.HiltViewModel
+import it.alexm.beers.data.api.BeersService
 import it.alexm.beers.data.datasource.BeersPagingSource
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BeersListViewModel : ViewModel() {
+@HiltViewModel
+class BeersListViewModel @Inject constructor(private val service: BeersService) : ViewModel() {
 
     private val searchFlow = MutableStateFlow("")
 
@@ -30,6 +34,8 @@ class BeersListViewModel : ViewModel() {
 
     fun getBeers(beerName: String? = null, start: String? = null, end: String? = null) = Pager(
         config = PagingConfig(pageSize = 25, enablePlaceholders = false),
-        pagingSourceFactory = { BeersPagingSource(beerName, start, end) }
+        pagingSourceFactory = {
+            BeersPagingSource(service, beerName, start, end)
+        }
     ).flow.cachedIn(viewModelScope)
 }
