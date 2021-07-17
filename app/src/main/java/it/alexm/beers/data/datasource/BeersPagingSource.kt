@@ -2,23 +2,28 @@ package it.alexm.beers.data.datasource
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
-import it.alexm.beers.data.api.lazyBeerService
+import it.alexm.beers.data.api.BeersService
 import it.alexm.beers.data.vo.Beer
 
 /**
  * created by alexm on 07/07/21
  */
 class BeersPagingSource(
+    private val service: BeersService,
     beerName: String?,
     start: String?,
     end: String?
 ) : PagingSource<Int, Beer>() {
 
-    private var mBeerName: String? = beerName?.replace(" ", "_")
-    private var mStart: String? = start
-    private var mEnd: String? = end
+    private var mBeerName: String? = null
+    private var mStart: String? = null
+    private var mEnd: String? = null
 
-    private val service by lazyBeerService()
+    init {
+        mBeerName = beerName?.replace(" ", "_")
+        mStart = start
+        mEnd = end
+    }
 
     companion object {
         private const val STARTING_PAGE = 1
