@@ -12,9 +12,10 @@ class BeerViewHolder(private val binding: BeerElementBinding) :
 
     fun bind(beer: Beer?, beerClick: BeerClickAction) {
         beer?.apply {
+            binding.beerImage.load(imageUrl)
             binding.name.text = name
             binding.tagline.text = tagline
-            binding.beerImage.load(imageUrl)
+            binding.description.text = description
             binding.root.setOnClickListener {
                 beerClick.invoke(this)
             }
