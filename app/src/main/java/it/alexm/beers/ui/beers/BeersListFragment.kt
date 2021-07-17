@@ -50,6 +50,12 @@ class BeersListFragment : Fragment() {
 
         binding?.recyclerView?.adapter = controller
 
+        binding?.offersCard?.setOnClickListener {
+            findNavController().navigate(
+                BeersListFragmentDirections.toOffersFragment()
+            )
+        }
+
         binding?.swipeRefreshLayout?.setOnRefreshListener {
             controller.refresh()
         }

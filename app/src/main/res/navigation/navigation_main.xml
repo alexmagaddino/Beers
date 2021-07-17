@@ -7,27 +7,30 @@
     <fragment
         android:id="@+id/beersListFragment"
         android:name="it.alexm.beers.ui.beers.BeersListFragment"
-        android:label="Beer List">
+        android:label="@string/beer_box">
         <action
             android:id="@+id/to_detailFragment"
             app:destination="@id/detail"
             app:popUpTo="@id/beersListFragment"
             app:popUpToInclusive="false" />
+        <action
+            android:id="@+id/to_offersFragment"
+            app:destination="@id/offersFragment" />
     </fragment>
-    <fragment
+    <dialog
         android:id="@+id/detail"
         android:name="it.alexm.beers.ui.detail.DetailFragment"
         android:label="{title}">
-
         <argument
             android:name="title"
             app:argType="string"
             app:nullable="true" />
-
         <argument
             android:name="beer"
             app:argType="it.alexm.beers.data.vo.Beer" />
-
-    </fragment>
-
+    </dialog>
+    <fragment
+        android:id="@+id/offersFragment"
+        android:name="it.alexm.beers.ui.offer.OffersFragment"
+        android:label="@string/offers_title" />
 </navigation>

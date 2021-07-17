@@ -4,16 +4,21 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.navArgs
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import it.alexm.beers.R
 import it.alexm.beers.databinding.FragmentBeerDetailBinding
 import it.alexm.beers.load
 
-class DetailFragment : Fragment(R.layout.fragment_beer_detail) {
+class DetailFragment : BottomSheetDialogFragment() {
 
     private var binding: FragmentBeerDetailBinding? = null
     private val args: DetailFragmentArgs by navArgs()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setStyle(STYLE_NORMAL, R.style.MyBottomSheet)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
